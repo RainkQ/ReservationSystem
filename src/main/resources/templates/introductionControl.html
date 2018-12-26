@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <script src="http://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
+    <link href="http://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+    <script src="http://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+    <script>
+        function show(i) {
+            var s = document.getElementById(i);
+            if (s.style.display == "block")
+                s.style.display = "none";
+            else
+                s.style.display = "block";
+        }
+
+        function parse() {
+            var str = $("input[type='checkbox']:checked");
+            var length = str.length;
+            var pids = "";
+            for (i = 0; i < length - 1; i++) {
+                if (str[i].checked == true)
+                    pids = pids + str[i].value + "_";
+            }
+            if (str[length - 1].checked) {
+                pids = pids + str[length - 1].value;
+            }
+            window.location.href = ("/submitbook/" + pids);
+        }
+
+
+        function editSite(sid, sName, sDesc) {
+            let Name = document.getElementById(sName).value;
+            let Desc = document.getElementById(sDesc).value;
+
+
+            window.location.href = ("/editSite/" + sid + "/0" + Name + "/0" + Desc);
+        }
+
+
+        function submitNewSite(sName, sDesc) {
+            let Name = document.getElementById(sName).value;
+            let Desc = document.getElementById(sDesc).value;
+
+
+
+            window.location.href = ("/newSite/0" + Name + "/0" + Desc);
+        }
+    </script>
+
+</head>
+<body style="padding-top: 80px;">
+<ul class="nav nav-tabs navbar-default navbar-fixed-top">
+    <style>
+        li {
+            text-align: center;
+        }
+    </style>
+    <li role="presentation" class="active col-xs-2"><a href="/introduction">场馆介绍</a></li>
+    <li role="presentation" class=" col-xs-2"><a href="/bookControl">场馆预约</a></li>
+    <li role="presentation" class=" col-xs-2"><a href="/bookedControl">订单管理</a></li>
+    <li role="presentation" class=" col-xs-2"><a href="/newsControl">新闻管理</a></li>
+    <li role="presentation" class=" col-xs-2"><a href="/noteControl">留言管理</a></li>
+    <li role="presentation" class=" col-xs-2" ><a href="/quit" th:text="${user.username}+'  点击退出'"></a></li>
+</ul>
+
+
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="width: 70%; margin: auto;">
+    <div class="panel panel-default" th:each="site:${sites}">
+        <div class="panel-heading" role="tab" th:id="'heading'+${site.getSid()}">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" th:text="${site.getsName()}+'    点击展开'" data-parent="#accordion" th:href="'#collapse'+${site.getSid()}" aria-expanded="true" th:aria-controls="'collapse'+${site.getSid()}">
+
+                </a>
+            </h4>
+        </div>
+        <div th:id="'collapse'+${site.getSid()}" class="panel-collapse collapse" role="tabpanel" th:aria-labelledby="'heading'+${site.getSid()}">
+            <div class="panel-body" >
+                <div th:text="${site.getsDesc()}" class="col-xs-6"></div>
+                <div class="col-xs-6">
+                    <div style="text-align: right" class="input-group">
+                        <span class="input-group-addon" th:id="'addon-name'+${site.getSid()}">场馆名称</span>
+                        <input class="form-control" type="text" th:id="'new_sName'+${site.getSid()}" th:aria-describedby="'new_sName'+${site.getSid()}" th:value="${site.getsName()}">
+                    </div>
+                    <div style="text-align: right" class="input-group">
+                        <span class="input-group-addon" th:id="'addon-desc'+${site.getSid()}">场馆描述</span>
+                        <textarea class="form-control" th:id="'new_sDesc'+${site.getSid()}" th:aria-describedby="'new_sDesc'+${site.getSid()}" > </textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary col-xs-12" th:onclick="'editSite('+${site.getSid()}+',\'new_sName'+${site.getSid()}+'\',\'new_sDesc'+${site.getSid()}+'\')'">
+                        修改场馆信息
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div style="width: 70%;margin:auto;">
+    <div class="col-xs-12" >
+        <div style="text-align: right" class="input-group">
+            <span class="input-group-addon" id="addon-name">场馆名称</span>
+            <input class="form-control" type="text" id="new_sName"
+                   aria-describedby="new_sName">
+        </div>
+        <div style="text-align: right" class="input-group">
+            <span class="input-group-addon" id="addon-desc">场馆描述</span>
+            <textarea class="form-control" id="new_sDesc" aria-describedby="new_sDesc">
+            </textarea>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary col-xs-12" onclick="submitNewSite('new_sName','new_sDesc')">
+        添加场馆
+    </button>
+</div>
+
+
+
+</body>
+</html>
