@@ -9,6 +9,7 @@ import com.tnicy.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,9 +27,11 @@ public class BookController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping("/book")
+    @GetMapping("/book")
     public String book(Model model, HttpSession session) {
-
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         ArrayList<Site> sites = siteRepository.findAll();
         model.addAttribute("sites", sites);
         ArrayList<Period> periods = periodRepository.findAll();
@@ -43,8 +46,13 @@ public class BookController {
         return "book";
     }
 
-    @RequestMapping("/submitbook/{pids}")
+    @GetMapping("/submitbook/{pids}")
     public String submitBook(@PathVariable("pids") String pids, Model model, HttpSession session) {
+
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
+
         String[] words = pids.split("_");
 
         User user = (User) session.getAttribute("user");
@@ -63,8 +71,12 @@ public class BookController {
         return "redirect:/book";
     }
 
-    @RequestMapping("/off/{pid}")
+    @GetMapping("/off/{pid}")
     public String bookOff(@PathVariable("pid") String pid, HttpSession session) {
+
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
 
         User user = (User) session.getAttribute("user");
         String[] words = user.getBooked().split("_");
@@ -85,9 +97,11 @@ public class BookController {
         return "redirect:/booked";
     }
 
-    @RequestMapping("/booked")
+    @GetMapping("/booked")
     public String booked(HttpSession session, Model model) {
-
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", session.getAttribute("user"));
         User user = (User) session.getAttribute("user");
         String[] words;

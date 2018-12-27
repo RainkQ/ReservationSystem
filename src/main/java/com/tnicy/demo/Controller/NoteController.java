@@ -22,6 +22,9 @@ public class NoteController {
     UserRepository userRepository;
     @GetMapping("/note")
     public String note(Model model,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         int uid=(int)session.getAttribute("uid");
         ArrayList<Comment> comments=(ArrayList<Comment>)noteRepository.findAll();
         model.addAttribute("comments",comments);
@@ -41,13 +44,19 @@ public class NoteController {
     }
 
     @GetMapping("/userremovenote/{cid}")
-    public String userremovenote(@PathVariable("cid") int cid){
+    public String userremovenote(@PathVariable("cid") int cid,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         noteRepository.deleteById(cid);
         return "redirect:/note";
     }
 
     @GetMapping("noteControl")
     public String noteControl(Model model,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         ArrayList<Comment> comments=(ArrayList<Comment>)noteRepository.findAll();
         model.addAttribute("comments",comments);
         model.addAttribute("user", session.getAttribute("user"));
@@ -60,6 +69,9 @@ public class NoteController {
 //        int uid=(int)session.getAttribute("uid");
 //        User user=userRepository.findByUid(uid);
 
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         noteRepository.deleteById(cid);
         return "redirect:/noteControl";
     }

@@ -15,6 +15,20 @@ An easy, simple and speedy reservation system.
 
 Jdk1.8+ 本项目基于Jdk11构建，之前版本也许会遇到一些问题。
 
+## 使用手册
+
+### 注册&登录
+
+![1545885615674](1545885615674.png)
+
+![1545885657662](1545885657662.png)
+
+字面意义上的简洁明了。
+
+### 
+
+### 
+
 ## Built With
 
 * [Spring Boot](https://spring.io/projects/spring-boot) - java后端框架

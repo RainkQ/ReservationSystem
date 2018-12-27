@@ -51,7 +51,10 @@ public class AdminController {
 
     //新增时段
     @GetMapping("/newPeriod/{sid}/{day}/{starttime}/{endtime}/{cost}")
-    public String newPeriod(@PathVariable("sid") Integer sid, @PathVariable("day") Integer day, @PathVariable("starttime") Integer starttime, @PathVariable("endtime") Integer endtime, @PathVariable("cost") Integer cost) {
+    public String newPeriod(@PathVariable("sid") Integer sid, @PathVariable("day") Integer day, @PathVariable("starttime") Integer starttime, @PathVariable("endtime") Integer endtime, @PathVariable("cost") Integer cost,HttpSession session) {
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         Period period = new Period();
         period.setSid(sid);
         period.setDate(day);
@@ -67,7 +70,10 @@ public class AdminController {
 
     //删除时段
     @GetMapping("/delPeriod/{pid}")
-    public String delPeriod(@PathVariable("pid") String pidString) {
+    public String delPeriod(@PathVariable("pid") String pidString,HttpSession session) {
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         int pid = Integer.parseInt(pidString);
         periodRepository.deleteByPid(pid);
         return "redirect:/bookControl";
@@ -75,7 +81,10 @@ public class AdminController {
 
 
     @GetMapping("/newSite/{sName}/{sDesc}")
-    public String newSite(@PathVariable("sName") String sName, @PathVariable("sDesc") String sDesc) {
+    public String newSite(@PathVariable("sName") String sName, @PathVariable("sDesc") String sDesc,HttpSession session) {
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         Site site = new Site();
         sName = sName.substring(1);
         site.setsName(sName);
@@ -87,7 +96,11 @@ public class AdminController {
 
     //删除Site
     @GetMapping("/delSite/{sid}")
-    public String delSite(@PathVariable("sid") String sidString) {
+    public String delSite(@PathVariable("sid") String sidString,HttpSession session) {
+
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         int sid = Integer.parseInt(sidString);
         siteRepository.deleteBySid(sid);
         periodRepository.deleteAllBySid(sid);
@@ -96,6 +109,9 @@ public class AdminController {
 
     @GetMapping("bookedControl")
     public String bookedControl(Model model,HttpSession session) {
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         ArrayList<User> users = (ArrayList<User>) userRepository.findAll();
         ArrayList<Period> periods = periodRepository.findAll();
         model.addAttribute("users", users);
@@ -105,7 +121,10 @@ public class AdminController {
     }
 
     @GetMapping("removeperiod/{pid}/{uid}")
-    public String removeperiod(@PathVariable("pid") int pid, @PathVariable("uid") int uid) {
+    public String removeperiod(@PathVariable("pid") int pid, @PathVariable("uid") int uid,HttpSession session) {
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         Period period=periodRepository.findByPid(pid);
         period.setIsOccupied(0);
         User user = userRepository.findByUid(uid);

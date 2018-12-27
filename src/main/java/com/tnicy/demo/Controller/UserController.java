@@ -26,6 +26,8 @@ public class UserController {
         else {
             userRepository.save(user);
             User GotUser = userRepository.findByTelephone(user.getTelephone());
+            session.setAttribute("user",GotUser);
+            session.setAttribute("Admin",GotUser.getAdmin());
             session.setAttribute("uid", GotUser.getUid());
         }
 
@@ -39,9 +41,8 @@ public class UserController {
     public String login(User user, Model model,HttpSession session){
         User GotUser=userRepository.findByUsername(user.getUsername());
 
-        if(GotUser.getPassword().equals(user.getPassword())){
+        if(GotUser!=null&&GotUser.getPassword().equals(user.getPassword())){
             session.setAttribute("uid",GotUser.getUid());
-            Integer i=GotUser.getAdmin();
             session.setAttribute("Admin",GotUser.getAdmin());
             session.setAttribute("user",GotUser);
             return "redirect:/";

@@ -19,6 +19,9 @@ public class NewsController {
 
     @GetMapping("/news")
     public String newsControl(Model model, HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         ArrayList<News> news=(ArrayList<News>)newsRepository.findAll();
         model.addAttribute("news",news);
         model.addAttribute("user", session.getAttribute("user"));
@@ -27,6 +30,9 @@ public class NewsController {
 
     @GetMapping("/returnnews/{nid}")
     public String shownews(Model model, @PathVariable("nid") int nid,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         News news=newsRepository.findByNid(nid);
         model.addAttribute("title",news.getTitle());
         model.addAttribute("content",news.getContent());
@@ -36,6 +42,9 @@ public class NewsController {
 
     @GetMapping("/newsControl")
     public String newscontrol(Model model,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         ArrayList<News> news=(ArrayList<News>)newsRepository.findAll();
         model.addAttribute("news",news);
         model.addAttribute("user", session.getAttribute("user"));
@@ -44,6 +53,9 @@ public class NewsController {
 
     @GetMapping("/returnnews2/{nid}")
     public String shownews2(Model model, @PathVariable("nid") int nid,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         News news=newsRepository.findByNid(nid);
         model.addAttribute("title",news.getTitle());
         model.addAttribute("content",news.getContent());
@@ -58,7 +70,10 @@ public class NewsController {
     }
 
     @GetMapping("/removenews/{nid}")
-    public String removenews(@PathVariable("nid") int nid){
+    public String removenews(@PathVariable("nid") int nid,HttpSession session){
+        if (session.getAttribute("uid") == null) {
+            return "redirect:/";
+        }
         newsRepository.deleteByNid(nid);
         return "redirect:/newsControl";
     }
