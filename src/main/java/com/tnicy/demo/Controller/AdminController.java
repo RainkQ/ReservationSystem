@@ -11,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
@@ -51,7 +49,7 @@ public class AdminController {
 
     //新增时段
     @GetMapping("/newPeriod/{sid}/{day}/{starttime}/{endtime}/{cost}")
-    public String newPeriod(@PathVariable("sid") Integer sid, @PathVariable("day") Integer day, @PathVariable("starttime") Integer starttime, @PathVariable("endtime") Integer endtime, @PathVariable("cost") Integer cost,HttpSession session) {
+    public String newPeriod(@PathVariable("sid") Integer sid, @PathVariable("day") Integer day, @PathVariable("starttime") Integer starttime, @PathVariable("endtime") Integer endtime, @PathVariable("cost") Integer cost, HttpSession session) {
         if (session.getAttribute("uid") == null) {
             return "redirect:/";
         }
@@ -70,7 +68,7 @@ public class AdminController {
 
     //删除时段
     @GetMapping("/delPeriod/{pid}")
-    public String delPeriod(@PathVariable("pid") String pidString,HttpSession session) {
+    public String delPeriod(@PathVariable("pid") String pidString, HttpSession session) {
         if (session.getAttribute("uid") == null) {
             return "redirect:/";
         }
@@ -81,7 +79,7 @@ public class AdminController {
 
 
     @GetMapping("/newSite/{sName}/{sDesc}")
-    public String newSite(@PathVariable("sName") String sName, @PathVariable("sDesc") String sDesc,HttpSession session) {
+    public String newSite(@PathVariable("sName") String sName, @PathVariable("sDesc") String sDesc, HttpSession session) {
         if (session.getAttribute("uid") == null) {
             return "redirect:/";
         }
@@ -96,7 +94,7 @@ public class AdminController {
 
     //删除Site
     @GetMapping("/delSite/{sid}")
-    public String delSite(@PathVariable("sid") String sidString,HttpSession session) {
+    public String delSite(@PathVariable("sid") String sidString, HttpSession session) {
 
         if (session.getAttribute("uid") == null) {
             return "redirect:/";
@@ -108,7 +106,7 @@ public class AdminController {
     }
 
     @GetMapping("bookedControl")
-    public String bookedControl(Model model,HttpSession session) {
+    public String bookedControl(Model model, HttpSession session) {
         if (session.getAttribute("uid") == null) {
             return "redirect:/";
         }
@@ -121,11 +119,11 @@ public class AdminController {
     }
 
     @GetMapping("removeperiod/{pid}/{uid}")
-    public String removeperiod(@PathVariable("pid") int pid, @PathVariable("uid") int uid,HttpSession session) {
+    public String removeperiod(@PathVariable("pid") int pid, @PathVariable("uid") int uid, HttpSession session) {
         if (session.getAttribute("uid") == null) {
             return "redirect:/";
         }
-        Period period=periodRepository.findByPid(pid);
+        Period period = periodRepository.findByPid(pid);
         period.setIsOccupied(0);
         User user = userRepository.findByUid(uid);
         String[] bookeds = user.getBooked().split("_");
